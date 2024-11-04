@@ -1,0 +1,50 @@
+{
+  "branches": [
+    "main",
+    "develop"
+  ],
+  "ci": false,
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "default",
+        "releaseRules": [
+          {"type": "fix", "release": "patch"},
+          {"type": "feat", "release": "minor"},
+          {"type": "breaking", "release": "major"},
+          {"scope": "no-release", "release": false}
+        ]
+      }
+    ],
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "writerOpts": {
+          "commitsSort": ["subject", "scope"],
+          "transform": (commit) => {
+            if (commit.merge) {
+              commit.type = "Merged PR";
+              commit.subject = commit.header;
+            }
+          return commit;
+        }
+      }
+    }
+    ],
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md",
+        "changelogTitle": "# Changelog\n\nAll notable changes to this project will be documented in this file."
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "successComment": false,
+        "failComment": false
+      }
+    ]
+  ]
+}
