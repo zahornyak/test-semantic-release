@@ -22,15 +22,9 @@
       {
         "writerOpts": {
           "commitsSort": ["subject", "scope"],
-          "transform": (commit) => {
-            if (commit.merge) {
-              commit.type = "Merged PR";
-              commit.subject = commit.header;
-            }
-          return commit;
+          "transform": "./transform-commit.js"
         }
       }
-    }
     ],
     [
       "@semantic-release/changelog",
