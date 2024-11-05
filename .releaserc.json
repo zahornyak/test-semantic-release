@@ -5,39 +5,24 @@
   ],
   "ci": false,
   "plugins": [
-    [
-      "@semantic-release/commit-analyzer",
-      {
-        "preset": "default",
-        "releaseRules": [
-          {"type": "fix", "release": "patch"},
-          {"type": "feat", "release": "minor"},
-          {"type": "breaking", "release": "major"},
-          {"scope": "no-release", "release": false}
-        ]
-      }
-    ],
+    "@semantic-release/commit-analyzer",
     [
       "@semantic-release/release-notes-generator",
       {
+        "preset": "conventionalcommits",
+        "presetConfig": {
+          "issuePrefixes": ["AFAD"]
+        },
         "writerOpts": {
-          "commitsSort": ["subject", "scope"],
-          "transform": "./transform-commit.js"
+          "commitPartial": "*{{#if scope}} **{{scope}}:**\n{{~/if}} {{#if subject}}\n  {{~subject}}\n{{~else}}\n  {{~header}}\n{{~/if}}\n\n{{~!-- commit references --}}\n{{~#if references~}}\n  , closes\n  {{~#each references}} {{#if @root.linkReferences~}}\n    [\n    {{~#if this.owner}}\n      {{~this.owner}}/\n    {{~/if}}\n    {{~this.repository}}{{this.prefix}}{{this.issue}}](https://group107.atlassian.net/browse/{{prefix}}{{this.issue}})\n  {{~else}}\n    {{~#if this.owner}}\n      {{~this.owner}}/\n    {{~/if}}\n    {{~this.repository}}{{this.prefix}}{{this.issue}}\n  {{~/if}}{{/each}}\n{{~/if}}\n\n"
         }
+
       }
     ],
     [
       "@semantic-release/changelog",
       {
-        "changelogFile": "CHANGELOG.md",
-        "changelogTitle": "# Changelog\n\nAll notable changes to this project will be documented in this file."
-      }
-    ],
-    [
-      "@semantic-release/github",
-      {
-        "successComment": false,
-        "failComment": false
+        "changelogFile": "CHANGELOG.md"
       }
     ]
   ]
